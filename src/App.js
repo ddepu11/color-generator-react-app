@@ -8,6 +8,7 @@ function App() {
   const [colors, setColors] = useState([]);
   const [color, setColor] = useState("");
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(false);
 
   function handleChange(e) {
     const newColor = e.target.value.trim();
@@ -15,8 +16,15 @@ function App() {
   }
   const getShadesAndTints = () => {
     let c = color === null || color === "" ? "#7868e6" : color;
-    const shadesAndTints = new Values(c);
-    setColors(shadesAndTints.all());
+    try {
+      const shadesAndTints = new Values(c);
+      setColors(shadesAndTints.all());
+      setError(false);
+    } catch (error) {
+      console.log(error);
+      setError(true);
+    }
+
     setLoading(false);
   };
 
@@ -32,6 +40,7 @@ function App() {
   return (
     <div className="container">
       <Header
+        error={error}
         setColor={handleChange}
         handleSubmit={handleSubmit}
         color={color}

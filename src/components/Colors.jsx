@@ -1,4 +1,7 @@
+import { useState } from "react";
+
 const Colors = ({ item }) => {
+  const [copied, setCopied] = useState(false);
   const { type, weight, rgb, hex } = item;
 
   let textColor = "";
@@ -6,8 +9,6 @@ const Colors = ({ item }) => {
   if (type.trim() === "tint") {
     textColor = "#333";
   }
-
-  console.log(type.trim() === "tint");
 
   return (
     <div
@@ -17,12 +18,16 @@ const Colors = ({ item }) => {
         color: `${textColor}`,
       }}
       onClick={() => {
-        navigator.clipboard.writeText(`#${hex}`).then(() => {});
+        navigator.clipboard.writeText(`#${hex}`).then(() => {
+          setCopied(true);
+          setTimeout(() => setCopied(false), 3000);
+        });
       }}
     >
       <h3>{weight}%</h3>
+
       <h4>#{hex}</h4>
-      <p>{}</p>
+      {copied ? <p>Copied to the clipboard</p> : ""}
     </div>
   );
 };
